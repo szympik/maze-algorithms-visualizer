@@ -4,6 +4,7 @@ class Cell:
         self.y = y
         self.parent_i = -1
         self.parent_j = -1    
+        
         self.g_cost = float('inf')          
         self.f_cost = float('inf') 
         self.h_cost = 0    

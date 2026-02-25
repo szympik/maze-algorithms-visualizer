@@ -10,13 +10,13 @@ def is_unblocked(cell, maze):
 
     if not is_valid(cell, maze):
         return False
-    return maze.maze[cell.x][cell.y] == 1
+    return maze.grid[cell.x][cell.y] == 0
     
 def is_destination(cell, maze):
-    return cell.x == maze.destination_x and cell.y == maze.destination_y
+    return (cell.x, cell.y) == maze.end
               
 def calculate_h_cost(cell, maze):
-    cell.h_cost = math.sqrt((cell.x - maze.destination_x) ** 2 + (cell.y - maze.destination_y) ** 2)
+    cell.h_cost = math.sqrt((cell.x - maze.end[0]) ** 2 + (cell.y - maze.end[1]) ** 2)
 
 def trace_path(cell,cell_details, maze):
     path = []
@@ -27,67 +27,66 @@ def trace_path(cell,cell_details, maze):
                 break
         cell = cell_details[parent_i][parent_j]
     return path[::-1]
+def plt_show_maze(maze, path=None):
+    img = np.array(maze.grid)
     
+    # jeśli path, oznacz ją jako 0.5
+    if path:
+        for x, y in path:
+            img[x][y] = 0.5
+
+    plt.figure(figsize=(10,10))
+    plt.imshow(img, cmap='gray')
+    plt.axis('off')
+    plt.show()
+
 def print_path(path):
     for x, y in path:
         print(f"({x}, {y})", end=" ")
     print("\nPath length:", len(path))
 
 # A* Search Algorithm
-def a_star_search(maze):
+def a_star_search(maze,step_callback=None):
+    start_x, start_y = maze.start
+    end_x, end_y = maze.end
+
     closed_list = [[False for _ in range(maze.width)] for _ in range(maze.height)]
     cell_details = [[Cell(i, j) for j in range(maze.width)] for i in range(maze.height)]
-    cell_details[0][0].g_cost = 0
-    cell_details[0][0].f_cost = 0
-    star_cell = Cell(0, 0).cell_details()
-    directions = [(0, 1), (0, -1), (1, 0), (-1, 0),
-                  (1, 1), (1, -1), (-1, 1), (-1, -1)]
+
+    cell_details[start_x][start_y].g_cost = 0
+    cell_details[start_x][start_y].f_cost = 0
 
     open_list = []
-    heapq.heappush(open_list, (0, star_cell))
+    heapq.heappush(open_list, (0, (start_x, start_y)))
 
-    found_dest = False
+    directions = [(0,1),(0,-1),(1,0),(-1,0)]
 
     while open_list:
-        p = heapq.heappop(open_list)
-        i, j = p[1][0], p[1][1]
+        f, (i,j) = heapq.heappop(open_list)
         closed_list[i][j] = True
-        
-        print(f"Processing cell: ({i}, {j}) with f_cost: {cell_details[i][j].f_cost:.2f}") # Debug print
-        
-        for direction in directions:
-            new_i, new_j = i + direction[0], j + direction[1]
-            if is_unblocked(Cell(new_i, new_j), maze):
-                
-                
-                if not closed_list[new_i][new_j]:
-                
-                
-                    print(f"  Checking neighbor: ({new_i}, {new_j})") # Debug print
-                    
-                    if is_destination(cell_details[new_i][new_j], maze):
-                        
-                        print(f"Destination found at: ({new_i}, {new_j})") # Debug print
-                        cell_details[new_i][new_j].parent_i = i  
-                        cell_details[new_i][new_j].parent_j = j  
-                        found_dest = True
-                        return trace_path(cell_details[new_i][new_j],cell_details, maze)
-                    else:
-                        g_cost = cell_details[i][j].g_cost + math.sqrt(direction[0] ** 2 + direction[1] ** 2)
-                        h_cost = math.sqrt((new_i - maze.destination_x) ** 2 + (new_j - maze.destination_y) ** 2)
-                        f_cost = g_cost + h_cost
 
-                        if cell_details[new_i][new_j].f_cost == float('inf') or cell_details[new_i][new_j].f_cost > f_cost:
-                            
-                            print(f"  Updating neighbor: ({new_i}, {new_j}) with new f_cost: {f_cost:.2f}") # Debug print
-                            
-                            cell_details[new_i][new_j].g_cost = g_cost
-                            cell_details[new_i][new_j].h_cost = h_cost
-                            cell_details[new_i][new_j].f_cost = f_cost
-                            cell_details[new_i][new_j].parent_i = i
-                            cell_details[new_i][new_j].parent_j = j
-                            heapq.heappush(open_list, (f_cost, (new_i, new_j)))
-    if not found_dest:
-        print("Failed to find the Destination Cell")
-        return None
+        if step_callback:
+            step_callback((i,j), open_list)
+
+        if (i,j) == maze.end:
+            return trace_path(cell_details[i][j], cell_details, maze)
+
+        for dx, dy in directions:
+            ni, nj = i + dx, j + dy
+            if 0 <= ni < maze.height and 0 <= nj < maze.width and not closed_list[ni][nj]:
+                if maze.grid[ni][nj] == 0:  
+                    g_new = cell_details[i][j].g_cost + math.sqrt(dx**2 + dy**2)
+                    h_new = math.sqrt((ni - end_x)**2 + (nj - end_y)**2)
+                    f_new = g_new + h_new
+
+                    if cell_details[ni][nj].f_cost == float('inf') or cell_details[ni][nj].f_cost > f_new:
+                        cell_details[ni][nj].g_cost = g_new
+                        cell_details[ni][nj].h_cost = h_new
+                        cell_details[ni][nj].f_cost = f_new
+                        cell_details[ni][nj].parent_i = i
+                        cell_details[ni][nj].parent_j = j
+                        heapq.heappush(open_list, (f_new, (ni,nj)))
+
+    print("Failed to find destination")
+    return None
 
