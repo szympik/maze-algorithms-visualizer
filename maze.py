@@ -3,9 +3,9 @@ import random
 import matplotlib.pyplot as plt
 import numpy as np
 class Maze:
-    def __init__(self, width, height):
-        self.width = 2*width + 1
-        self.height = 2*height + 1
+    def __init__(self,size):
+        self.width = 2*size + 1
+        self.height = 2*size + 1
         self.grid = [[1 for _ in range(self.width)] for _ in range(self.height)]
         self.start = (0, 1)
         self.end = (self.height - 1, self.width - 2)
