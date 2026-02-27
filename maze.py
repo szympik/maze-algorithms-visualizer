@@ -49,3 +49,6 @@ class Maze:
     
     def size(self):
         return self.width, self.height
+    
+    def white_cells(self):
+        return sum(row.count(0) for row in self.grid)

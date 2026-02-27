@@ -108,7 +108,7 @@ def menu():
 
     CX = 350  # środek okna
     
-    size_input       = InputBox(CX - 100, 195, 200, 44, '50')
+    size_input       = InputBox(CX - 100, 195, 200, 44, '10')
     solver_dropdown  = Dropdown(CX - 150, 295, 300, 44, ["A*", "BFS", "DFS"], font_option)
     creator_dropdown = Dropdown(CX - 150, 390, 300, 44, ["DFS Backtracking"], font_option)
 
@@ -119,7 +119,7 @@ def menu():
     while running:
         screen.fill(BG)
         
-        # --- Separator ---
+       
         pygame.draw.line(screen, SURFACE2, (50, 100), (650, 100), 1)
 
         # Tytuł
@@ -144,8 +144,7 @@ def menu():
         start_text = font_option.render("▶   START", True, (255, 255, 255))
         screen.blit(start_text, (start_rect.centerx - start_text.get_width()//2,
                                   start_rect.centery - start_text.get_height()//2))
-
-        # --- Overlaye dropdownów rysowane NA WIERZCHU ---
+    
         solver_dropdown.draw_overlay(screen)
         creator_dropdown.draw_overlay(screen)
 
@@ -186,8 +185,7 @@ def menu():
                     solver_name = solver_dropdown.options[solver_dropdown.selected]
                     if solver_name == "A*":
                        
-                       time_taken,visited_cells,path = visualize_solver(maze, a_star_search, 0.1)
-                       show_stats(maze, path, screen, time_taken, visited_cells, len(path))
+                        visualize_solver(maze, a_star_search)
                     # elif solver_name == "BFS":
                     #     time_taken = visualize_solver(maze, bfs_search, 0.1)
                     
@@ -196,11 +194,6 @@ def menu():
         clock.tick(60)
 
 
-def show_stats(maze, path,screen,time,visited_cells,path_length):
-    old_surface = screen.copy()
-    screen = pygame.display.set_mode((1000, 1200))
-    screen.blit(old_surface, (0, 0))
-    pygame.display.flip()
 
 def main():
     menu()
