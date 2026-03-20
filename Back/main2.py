@@ -1,10 +1,10 @@
-from importlib.resources import path
-from cell import *
-from maze import *
-from a_star import *
+from Back.utils.cell import *
+from Back.utils.maze import *
+from Back.algorithms.a_star import *
 import time
-from visualize import visualize_solver
-import pygame, time
+from Back.utils.visualize import visualize_solver
+import pygame
+
 
 BG        = (18,  18,  30)
 ACCENT    = (99, 102, 241)
