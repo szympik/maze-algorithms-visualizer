@@ -34,3 +34,5 @@ Thumbs.db
 htmlcov/
 .cache/
 pytest_cache/
+
+plan.txt

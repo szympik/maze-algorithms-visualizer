@@ -45,10 +45,19 @@ class Maze:
 
         return self.grid
 
-    def display_maze(self):
-        for row in self.grid:
-            print("".join("." if cell.walkable else "#" for cell in row))
-
+    def maze_to_json(self):
+        return [
+            [0 if not cell.walkable else 1 for cell in row]
+            for row in self.grid
+        ]
+    
+    def json_to_maze(self, json_maze):
+        self.grid = [
+            [Cell(x, y, walkable=bool(value)) for y, value in enumerate(row)]
+            for x, row in enumerate(json_maze)
+        ]
+        return self.grid
+    
     def size(self):
         return self.width, self.height
 

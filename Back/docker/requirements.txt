@@ -3,3 +3,5 @@ uvicorn
 pygame
 numpy
 matplotlib
+pytest
+httpx

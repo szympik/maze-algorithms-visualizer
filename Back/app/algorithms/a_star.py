@@ -36,7 +36,7 @@ def a_star_search(maze, step_callback=None):
     start_cell = maze.grid[start_x][start_y]
     end_cell = maze.grid[end_x][end_y]
 
-    # Reset cell states
+ 
     for row in maze.grid:
         for cell in row:
             cell.g = float('inf')
@@ -50,7 +50,7 @@ def a_star_search(maze, step_callback=None):
     start_cell.f = start_cell.h
 
     open_list = []
-    # Use (f, h, id, cell) to avoid comparing Cell objects when f ties
+   
     heapq.heappush(open_list, (start_cell.f, start_cell.h, id(start_cell), start_cell))
 
     directions = [(0,1),(0,-1),(1,0),(-1,0)]
