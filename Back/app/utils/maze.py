@@ -56,6 +56,10 @@ class Maze:
             [Cell(x, y, walkable=bool(value)) for y, value in enumerate(row)]
             for x, row in enumerate(json_maze)
         ]
+        self.height = len(self.grid)
+        self.width = len(self.grid[0]) if self.grid else 0
+        self.start = (0, 1) if self.width > 1 else (0, 0)
+        self.end = (self.height - 1, self.width - 2) if self.width > 1 else (self.height - 1, self.width - 1)
         return self.grid
     
     def size(self):

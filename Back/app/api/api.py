@@ -1,7 +1,6 @@
 from ..utils.solve import solve
 from ..utils.maze import Maze
 from fastapi import FastAPI, HTTPException, WebSocket, APIRouter, WebSocketDisconnect
-import asyncio
 from pydantic import BaseModel
 
 
@@ -47,18 +46,22 @@ async def solve_ws(websocket: WebSocket):
     maze.json_to_maze(data["maze"])
 
     algorithm = data.get("algorithm", "a_star")
+    steps: list[tuple[int, int]] = []
 
     def step_callback(current, open_list):
-        asyncio.create_task(websocket.send_json({
-            "type": "step",
-            "x": current[0],
-            "y": current[1],
-        }))
+        steps.append((current[0], current[1]))
 
     path = solve(maze, algorithm, step_callback=step_callback)
 
+    for x, y in steps:
+        await websocket.send_json({
+            "type": "step",
+            "x": x,
+            "y": y,
+        })
+
     await websocket.send_json({
         "type": "done",
-        "path": path
+        "path": path or []
     })
 

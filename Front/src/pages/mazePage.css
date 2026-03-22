@@ -1,0 +1,37 @@
+/* Styles for MazePage component */
+.maze-container {
+  margin: 12px auto; 
+  width: max-content;   
+}
+
+.maze-row {
+  display: flex;
+  align-items: center;
+}
+
+.maze-cell {
+  width: 20px;
+  height: 20px;
+  border: 1px solid gray;
+  box-sizing: border-box;
+}
+
+.maze-cell.path {
+  background-color: rgb(8, 177, 2);
+}
+
+.maze-cell.visited {
+  background-color: blue;
+}
+
+.maze-cell.wall {
+  background-color: black;
+}
+
+.maze-cell.open {
+  background-color: white;
+}
+
+button[disabled] {
+  opacity: 0.6;
+}
