@@ -45,13 +45,13 @@ python Back/main.py
 
 The API is available at `http://localhost:8000/api` by default (see `Front/.env` which points to this URL).
 
-## Favicon / app icon
+## Features
 
-- The HTML favicon link is in `index.html` (Front/index.html). I updated it to point to `src/assets/maze_icon.png`.
-- For production builds it's recommended to place the favicon in `Front/public` and reference it as `/favicon.png` or `/favicon.ico` to ensure the file is copied as-is.
+- Generate mazes of configurable size.
+- Solve mazes with pathfinding (A*).
+- Real-time solving updates via WebSocket.
+- Visualize maze, visited nodes, and final path in the UI.
 
 ## Notes
 
-- To see favicon changes you may need to clear browser cache or restart the dev server.
-- If you want, I can:
-  - copy `Front/src/assets/maze_icon.png` into `Front/public` and update `index.html` to `/favicon.png`, and generate a `favicon.ico`.
+- The frontend expects the API at `http://localhost:8000/api` (see `Front/.env`).
