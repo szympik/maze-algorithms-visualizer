@@ -38,7 +38,7 @@ export type ErrorMessage = {
 };
 
 export type WSMessage = StepMessage | DoneMessage | ErrorMessage;
-
+//point prasing
 function parseRawPoint(raw: RawPoint): Point | null {
   if (Array.isArray(raw) && raw.length >= 2) {
     const row = raw[0];

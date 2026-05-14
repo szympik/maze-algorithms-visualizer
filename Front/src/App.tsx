@@ -1,4 +1,4 @@
-import MazePage from "./pages/MazePage";
+import MazePage from "./pages/mazePage";
 
 function App() {
   return <MazePage />;
